@@ -1,10 +1,10 @@
-package com.ziapond.javaserver;
+package com.choizia.java_server;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class JavaserverApplicationTests {
+class JavaServerApplicationTests {
 
 	@Test
 	void contextLoads() {

@@ -1,13 +1,13 @@
-package com.ziapond.javaserver;
+package com.choizia.java_server;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class JavaserverApplication {
+public class JavaServerApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(JavaserverApplication.class, args);
+		SpringApplication.run(JavaServerApplication.class, args);
 	}
 
 }
