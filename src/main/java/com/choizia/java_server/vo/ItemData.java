@@ -36,4 +36,9 @@ public class ItemData {
     @Column(name = "stats", columnDefinition = "json")
     private List<Stats> stats;
 
+    @PrePersist
+    protected void onCreate() {
+        this.stat_time = LocalTime.now();
+    }
+
 }

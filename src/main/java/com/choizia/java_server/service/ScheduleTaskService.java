@@ -45,7 +45,6 @@ public class ScheduleTaskService {
                 if(itemData.getTradeRemainCount()==null){
                     itemData.setTradeRemainCount(1);
                 }
-                itemData.setStat_time(LocalTime.now());
                 itemDataService.saveItemData(itemData);
            }
         } catch (Exception e) {
