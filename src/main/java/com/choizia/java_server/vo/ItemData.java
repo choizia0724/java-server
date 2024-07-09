@@ -1,9 +1,12 @@
 package com.choizia.java_server.vo;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.hypersistence.utils.hibernate.type.json.JsonType;
 import jakarta.persistence.*;
 import lombok.Data;
+import org.hibernate.annotations.Type;
 
+import java.time.LocalTime;
 import java.util.List;
 
 @Data
@@ -11,9 +14,10 @@ import java.util.List;
 @Table(name = "item_data")
 public class ItemData {
 
-
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // 자동 생성 설정
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     private Integer code;
 
     @JsonProperty("Name")
@@ -25,7 +29,11 @@ public class ItemData {
     @JsonProperty("BundleCount")
     private Integer bundleCount;
 
-    @OneToMany(mappedBy = "itemData", cascade = CascadeType.ALL)
+    private LocalTime stat_time;
+
     @JsonProperty("Stats")
-    private List<HourlyStats> hourlyStats;
+    @Type(JsonType.class)
+    @Column(name = "stats", columnDefinition = "json")
+    private List<Stats> stats;
+
 }

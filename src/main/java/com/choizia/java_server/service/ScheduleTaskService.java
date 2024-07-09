@@ -1,6 +1,5 @@
 package com.choizia.java_server.service;
 
-import com.choizia.java_server.vo.HourlyStats;
 import com.choizia.java_server.vo.ItemData;
 import com.choizia.java_server.vo.ItemList;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -25,13 +24,10 @@ public class ScheduleTaskService {
     private ObjectMapper objectMapper;
 
     @Autowired
-    private ItemDataService itemDataService;
-
-    @Autowired
     private ItemListService itemListService;
 
     @Autowired
-    private HourlyStatsService hourlyStatsService;
+    private ItemDataService itemDataService;
 
     @Value("${lostark.api.url}")
     private String url;
@@ -40,25 +36,18 @@ public class ScheduleTaskService {
     private String token;
 
     // DB에 응답값 저장하는 로직
-    public void saveResponse(String response) {
+    public void saveResponse(String response,int code) {
         try {
             ItemData[] itemDataArray = objectMapper.readValue(response, ItemData[].class);
-            System.out.println("Parsed ItemData array: " + Arrays.toString(itemDataArray));
-            for (ItemData itemData : itemDataArray) {
-                // 먼저 ItemData 저장
-                itemDataService.saveItemData(itemData);
 
-                List<HourlyStats> hourlyStatsList = itemData.getHourlyStats();
-                System.out.println("Parsed hourlyStatsList object: " + hourlyStatsList);
-                if (hourlyStatsList != null) {
-                    for (HourlyStats hourlyStats : hourlyStatsList) {
-                        hourlyStats.setItemData(itemData); // 외래 키 설정
-                        hourlyStats.setStat_time(LocalTime.now());
-                        System.out.println("Parsed hourlyStats object: " + hourlyStats);
-                        hourlyStatsService.saveHourlyStats(hourlyStats);
-                    }
+            for (ItemData itemData : itemDataArray) {
+                itemData.setCode(code);
+                if(itemData.getTradeRemainCount()==null){
+                    itemData.setTradeRemainCount(1);
                 }
-            }
+                itemData.setStat_time(LocalTime.now());
+                itemDataService.saveItemData(itemData);
+           }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -83,7 +72,7 @@ public class ScheduleTaskService {
         for(ItemList itemList:itemLists) {
             int code = itemList.getCode();
             String response = getData(code);
-            saveResponse(response);
+            saveResponse(response,code);
         }
     }
 }
